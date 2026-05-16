@@ -59,48 +59,6 @@ ecommerce-backend/
 
 ---
 
-## Quick Start
-
-### 1. Install dependencies
-```bash
-npm install
-```
-
-### 2. Configure environment
-```bash
-cp .env.example .env
-# Edit .env with your MongoDB URI and secrets
-```
-
-### 3. Start MongoDB
-```bash
-# Local
-mongod
-
-# Or use MongoDB Atlas — paste your connection string in .env
-```
-
-### 4. Seed the database
-```bash
-npm run seed
-```
-This creates **15 sample products** and an **admin account**:
-- Email: `admin@shophub.com`
-- Password: `admin123`
-
-### 5. Run the server
-```bash
-# Development (auto-restart)
-npm run dev
-
-# Production
-npm start
-```
-
-Open **http://localhost:3000**
-
----
-
 ## Pages & Routes
 
 | Route                  | Description                              |
@@ -136,20 +94,5 @@ Open **http://localhost:3000**
 - **Admin** — protected dashboard, product CRUD, image upload via Multer
 - **Responsive** — mobile-first CSS matching mobile Figma screens
 
----
 
-## Connecting Your Frontend
 
-If you're using a separate frontend (React/Vue/etc.), you can consume the Express views as a REST API instead. Example endpoints already available via the existing routes — just respond with `res.json()` instead of `res.render()` in each handler.
-
----
-
-## Environment Variables
-
-| Variable        | Description                            | Default                          |
-|-----------------|----------------------------------------|----------------------------------|
-| `PORT`          | Server port                            | `3000`                           |
-| `MONGO_URI`     | MongoDB connection string              | `mongodb://localhost:27017/ecommerce` |
-| `SESSION_SECRET`| Session signing secret                 | *(set a strong random string)*   |
-| `JWT_SECRET`    | JWT signing secret (API auth)          | *(set a strong random string)*   |
-| `NODE_ENV`      | `development` or `production`          | `development`                    |
