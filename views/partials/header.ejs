@@ -1,0 +1,88 @@
+<!-- Top Nav Bar -->
+<header class="header">
+  <div class="header-top">
+    <div class="container header-top-inner">
+      <!-- Logo -->
+      <a href="/" class="logo">
+        <span class="logo-icon">🛍️</span>
+        <span class="logo-text">Brand</span>
+      </a>
+
+      <!-- Search Bar -->
+      <form class="search-bar" action="/products" method="GET">
+        <input type="text" name="search" placeholder="Search" value="<%= typeof search !== 'undefined' ? search : '' %>" class="search-input" />
+        <select name="category" class="search-category">
+          <option value="">All category</option>
+          <% if (typeof categories !== 'undefined') { %>
+            <% categories.forEach(cat => { %>
+              <option value="<%= cat %>" <%= (typeof selectedCategory !== 'undefined' && selectedCategory === cat) ? 'selected' : '' %>><%= cat %></option>
+            <% }) %>
+          <% } %>
+        </select>
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+
+      <!-- Header Icons -->
+      <div class="header-icons">
+        <% if (user) { %>
+          <a href="/auth/logout" class="header-icon-link">
+            <span class="icon">👤</span>
+            <span class="icon-label"><%= user.name.split(' ')[0] %></span>
+          </a>
+          <% if (user.role === 'admin') { %>
+            <a href="/admin" class="header-icon-link">
+              <span class="icon">⚙️</span>
+              <span class="icon-label">Admin</span>
+            </a>
+          <% } %>
+        <% } else { %>
+          <a href="/auth/login" class="header-icon-link">
+            <span class="icon">👤</span>
+            <span class="icon-label">Profile</span>
+          </a>
+        <% } %>
+        <a href="#" class="header-icon-link">
+          <span class="icon">💬</span>
+          <span class="icon-label">Message</span>
+        </a>
+        <a href="#" class="header-icon-link">
+          <span class="icon">📋</span>
+          <span class="icon-label">Orders</span>
+        </a>
+        <a href="/cart" class="header-icon-link" style="position:relative">
+          <span class="icon">🛒</span>
+          <span class="icon-label">My cart</span>
+          <% if (cartCount > 0) { %>
+            <span style="position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:10px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center"><%= cartCount %></span>
+          <% } %>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav Bar -->
+  <nav class="header-nav">
+    <div class="container header-nav-inner">
+      <a href="#" class="nav-all-cat">☰ All category</a>
+      <a href="/products?badge=Hot" class="nav-link">Hot offers</a>
+      <a href="#" class="nav-link">Gift boxes</a>
+      <a href="#" class="nav-link">Projects</a>
+      <a href="#" class="nav-link">Menu item</a>
+      <a href="#" class="nav-link nav-dropdown">Help ▾</a>
+      <div class="nav-right">
+        <span class="nav-lang">English, USD ▾</span>
+        <span class="nav-ship">🚢 Ship to 🇩🇪 ▾</span>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Flash Messages -->
+<div class="container">
+  <% if (success && success.length > 0) { %>
+    <div class="alert alert-success"><%= success[0] %></div>
+  <% } %>
+  <% if (error && error.length > 0) { %>
+    <div class="alert alert-error"><%= error[0] %></div>
+  <% } %>
+</div>

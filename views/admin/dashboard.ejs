@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<div class="admin-page">
+  <div class="container">
+    <div class="admin-header">
+      <h1>⚙️ Admin Dashboard</h1>
+      <a href="/admin/products/new" class="btn btn-primary">+ Add Product</a>
+    </div>
+
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success"><%= success[0] %></div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-error"><%= error[0] %></div>
+    <% } %>
+
+    <div class="admin-stats">
+      <div class="stat-card">
+        <div class="stat-num"><%= productCount %></div>
+        <div class="stat-label">Total Products</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--green)">Active</div>
+        <div class="stat-label">Store Status</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--orange)">0</div>
+        <div class="stat-label">Orders Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--red)">0</div>
+        <div class="stat-label">Low Stock Alerts</div>
+      </div>
+    </div>
+
+    <h2 style="font-size:16px;font-weight:600;margin-bottom:12px">Recent Products</h2>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Badge</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (products.length === 0) { %>
+          <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:32px">No products yet. <a href="/admin/products/new" style="color:var(--blue)">Add one!</a></td></tr>
+        <% } else { %>
+          <% products.forEach(p => { %>
+          <tr>
+            <td><img src="<%= p.image %>" alt="<%= p.name %>" onerror="this.src='/images/img.jpg'" /></td>
+            <td><a href="/products/<%= p._id %>" style="color:var(--blue)"><%= p.name %></a></td>
+            <td><%= p.category %></td>
+            <td>$<%= Number(p.price).toFixed(2) %></td>
+            <td><%= p.stock %></td>
+            <td><% if (p.badge) { %><span class="product-badge badge-<%= p.badge.toLowerCase() %>" style="position:static"><%= p.badge %></span><% } %></td>
+            <td>
+              <a href="/admin/products/<%= p._id %>/edit" class="btn btn-outline btn-sm">Edit</a>
+              <form action="/admin/products/<%= p._id %>/delete" method="POST" style="display:inline" onsubmit="return confirm('Delete this product?')">
+                <button type="submit" class="btn btn-sm" style="background:var(--red);color:white;border:none">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <h2>Create account</h2>
+    <p class="subtitle">Already have an account? <a href="/auth/login">Sign in</a></p>
+
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-error"><%= error[0] %></div>
+    <% } %>
+
+    <form action="/auth/signup" method="POST">
+      <div class="form-group">
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Min. 6 characters" required minlength="6" />
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Repeat password" required />
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">
+        By signing up, I agree to the <a href="#" style="color:var(--blue)">Terms of Use</a> and <a href="#" style="color:var(--blue)">Privacy Policy</a>.
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Create account</button>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

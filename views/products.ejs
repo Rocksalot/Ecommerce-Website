@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<div class="products-page">
+  <div class="container">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="/">Home</a> › <a href="/products">Products</a>
+      <% if (selectedCategory && selectedCategory !== 'All') { %>
+        › <span><%= selectedCategory %></span>
+      <% } %>
+      <% if (search) { %>
+        › <span>Search: "<%= search %>"</span>
+      <% } %>
+    </div>
+
+    <div class="products-layout">
+
+      <!-- Sidebar Filters -->
+      <aside class="filter-sidebar">
+        <form id="filter-form" action="/products" method="GET">
+          <% if (search) { %><input type="hidden" name="search" value="<%= search %>" /><% } %>
+
+          <!-- Category Filter -->
+          <div class="filter-section">
+            <h3>Category <span>∧</span></h3>
+            <ul class="filter-list">
+              <li><a href="/products<%= search ? '?search='+search : '' %>" class="<%= selectedCategory === 'All' ? 'active' : '' %>">All categories</a></li>
+              <% categories.forEach(cat => { %>
+              <li><a href="/products?category=<%= encodeURIComponent(cat) %><%= search ? '&search='+search : '' %>" class="<%= selectedCategory === cat ? 'active' : '' %>"><%= cat %></a></li>
+              <% }) %>
+            </ul>
+          </div>
+
+          <!-- Brand Checkboxes (decorative for now) -->
+          <div class="filter-section">
+            <h3>Brands <span>∧</span></h3>
+            <label class="filter-checkbox"><input type="checkbox" checked> Samsung</label>
+            <label class="filter-checkbox"><input type="checkbox" checked> Apple</label>
+            <label class="filter-checkbox"><input type="checkbox"> Huawei</label>
+            <label class="filter-checkbox"><input type="checkbox" checked> Pocco</label>
+            <label class="filter-checkbox"><input type="checkbox"> Lenovo</label>
+            <div class="see-all">See all</div>
+          </div>
+
+          <!-- Features -->
+          <div class="filter-section">
+            <h3>Features <span>∧</span></h3>
+            <label class="filter-checkbox"><input type="checkbox" checked> Metallic</label>
+            <label class="filter-checkbox"><input type="checkbox"> Plastic cover</label>
+            <label class="filter-checkbox"><input type="checkbox"> 8GB Ram</label>
+            <label class="filter-checkbox"><input type="checkbox"> Super power</label>
+            <div class="see-all">See all</div>
+          </div>
+
+          <!-- Price Range -->
+          <div class="filter-section">
+            <h3>Price range <span>∨</span></h3>
+            <div class="price-range-inputs">
+              <input type="number" placeholder="Min $" name="minPrice" />
+              <span>—</span>
+              <input type="number" placeholder="Max $" name="maxPrice" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" style="margin-top:8px;width:100%">Apply</button>
+          </div>
+
+          <!-- Condition, Ratings, Manufacturer -->
+          <div class="filter-section"><h3>Condition <span>∨</span></h3></div>
+          <div class="filter-section"><h3>Ratings <span>∨</span></h3></div>
+          <div class="filter-section"><h3>Manufacturer <span>∨</span></h3></div>
+        </form>
+      </aside>
+
+      <!-- Products Main -->
+      <main class="products-main">
+
+        <!-- Toolbar -->
+        <div class="products-toolbar">
+          <div class="results-count">
+            <strong><%= totalProducts.toLocaleString() %></strong> items
+            <% if (selectedCategory && selectedCategory !== 'All') { %> in <strong><%= selectedCategory %></strong><% } %>
+            <% if (search) { %> for "<strong><%= search %></strong>"<% } %>
+          </div>
+          <label style="font-size:13px;color:var(--text-muted)">Verified only <input type="checkbox" style="margin-left:4px"></label>
+          <div class="toolbar-sort">
+            <form action="/products" method="GET" id="sort-form">
+              <% if (search) { %><input type="hidden" name="search" value="<%= search %>" /><% } %>
+              <% if (selectedCategory && selectedCategory !== 'All') { %><input type="hidden" name="category" value="<%= selectedCategory %>" /><% } %>
+              <select name="sort" onchange="document.getElementById('sort-form').submit()" class="form-control" style="padding:5px 10px;font-size:13px">
+                <option value="newest" <%= selectedSort==='newest'?'selected':'' %>>Featured</option>
+                <option value="price-asc" <%= selectedSort==='price-asc'?'selected':'' %>>Price: Low to High</option>
+                <option value="price-desc" <%= selectedSort==='price-desc'?'selected':'' %>>Price: High to Low</option>
+                <option value="rating" <%= selectedSort==='rating'?'selected':'' %>>Best Rating</option>
+              </select>
+            </form>
+          </div>
+          <div class="view-toggle">
+            <button class="view-btn active" id="grid-btn" onclick="setView('grid')" title="Grid view">⊞</button>
+            <button class="view-btn" id="list-btn" onclick="setView('list')" title="List view">☰</button>
+          </div>
+        </div>
+
+        <!-- Active Filters -->
+        <% if (selectedCategory && selectedCategory !== 'All' || search) { %>
+        <div class="active-filters">
+          <% if (selectedCategory && selectedCategory !== 'All') { %>
+            <span class="filter-tag"><%= selectedCategory %> <a href="/products<%= search ? '?search='+search : '' %>" class="remove">×</a></span>
+          <% } %>
+          <% if (search) { %>
+            <span class="filter-tag">Search: "<%= search %>" <a href="/products<%= selectedCategory && selectedCategory !== 'All' ? '?category='+encodeURIComponent(selectedCategory) : '' %>" class="remove">×</a></span>
+          <% } %>
+          <a href="/products" class="clear-filters">Clear all filter</a>
+        </div>
+        <% } %>
+
+        <!-- Products Grid -->
+        <% if (products.length > 0) { %>
+          <div class="products-grid" id="products-container">
+            <% products.forEach(product => { %>
+              <%- include('partials/product-card', { product }) %>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div style="text-align:center;padding:60px;color:var(--text-muted)">
+            <div style="font-size:64px">🔍</div>
+            <h3 style="margin:16px 0 8px;color:var(--text)">No products found</h3>
+            <p>Try adjusting your search or filters</p>
+            <a href="/products" class="btn btn-primary" style="margin-top:16px">Browse all products</a>
+          </div>
+        <% } %>
+
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+        <div class="pagination">
+          <div class="pagination-show">
+            Show
+            <select onchange="window.location.href='/products?page=1&sort=<%= selectedSort %><%= selectedCategory && selectedCategory !== 'All' ? '&category='+encodeURIComponent(selectedCategory) : '' %><%= search ? '&search='+search : '' %>'">
+              <option>10</option>
+              <option>20</option>
+              <option>50</option>
+            </select>
+          </div>
+          <% if (currentPage > 1) { %>
+            <a href="/products?page=<%= currentPage-1 %>&sort=<%= selectedSort %><%= selectedCategory && selectedCategory !== 'All' ? '&category='+encodeURIComponent(selectedCategory) : '' %><%= search ? '&search='+search : '' %>" class="page-btn">‹</a>
+          <% } else { %>
+            <button class="page-btn" disabled>‹</button>
+          <% } %>
+
+          <% for (let i = Math.max(1, currentPage-2); i <= Math.min(totalPages, currentPage+2); i++) { %>
+            <a href="/products?page=<%= i %>&sort=<%= selectedSort %><%= selectedCategory && selectedCategory !== 'All' ? '&category='+encodeURIComponent(selectedCategory) : '' %><%= search ? '&search='+search : '' %>"
+               class="page-btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+          <% } %>
+
+          <% if (currentPage < totalPages) { %>
+            <a href="/products?page=<%= currentPage+1 %>&sort=<%= selectedSort %><%= selectedCategory && selectedCategory !== 'All' ? '&category='+encodeURIComponent(selectedCategory) : '' %><%= search ? '&search='+search : '' %>" class="page-btn">›</a>
+          <% } else { %>
+            <button class="page-btn" disabled>›</button>
+          <% } %>
+        </div>
+        <% } %>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script src="/js/main.js"></script>
+<script>
+function setView(type) {
+  const container = document.getElementById('products-container');
+  const gridBtn = document.getElementById('grid-btn');
+  const listBtn = document.getElementById('list-btn');
+  if (type === 'list') {
+    container.className = 'products-list';
+    container.querySelectorAll('.product-card').forEach(card => {
+      card.classList.add('list-product-card');
+    });
+    gridBtn.classList.remove('active');
+    listBtn.classList.add('active');
+  } else {
+    container.className = 'products-grid';
+    container.querySelectorAll('.product-card').forEach(card => {
+      card.classList.remove('list-product-card');
+    });
+    gridBtn.classList.add('active');
+    listBtn.classList.remove('active');
+  }
+  localStorage.setItem('viewMode', type);
+}
+// Restore preference
+const saved = localStorage.getItem('viewMode');
+if (saved) setView(saved);
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<div class="admin-page">
+  <div class="container">
+    <div class="admin-header">
+      <h1><%= product ? '✏️ Edit Product' : '➕ Add New Product' %></h1>
+      <a href="/admin" class="btn btn-outline">← Back to Dashboard</a>
+    </div>
+
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-error"><%= error[0] %></div>
+    <% } %>
+
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px;max-width:680px">
+      <form action="<%= action || '/admin/products' %>" method="POST" enctype="multipart/form-data" class="admin-form">
+
+        <div class="form-group">
+          <label>Product Name *</label>
+          <input type="text" name="name" class="form-control" required value="<%= product ? product.name : '' %>" placeholder="e.g. Wireless Bluetooth Headphones" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="form-group">
+            <label>Price (USD) *</label>
+            <input type="number" name="price" class="form-control" required step="0.01" min="0" value="<%= product ? product.price : '' %>" placeholder="0.00" />
+          </div>
+          <div class="form-group">
+            <label>Original Price (USD)</label>
+            <input type="number" name="originalPrice" class="form-control" step="0.01" min="0" value="<%= product ? product.originalPrice : '' %>" placeholder="0.00" />
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="form-group">
+            <label>Category *</label>
+            <select name="category" class="form-control" required>
+              <option value="">Select category</option>
+              <% ['Electronics','Fashion','Home & Garden','Sports','Beauty','Books','Toys','Other'].forEach(cat => { %>
+                <option value="<%= cat %>" <%= product && product.category === cat ? 'selected' : '' %>><%= cat %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stock</label>
+            <input type="number" name="stock" class="form-control" min="0" value="<%= product ? product.stock : 0 %>" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" class="form-control" rows="4" placeholder="Product description..."><%= product ? product.description : '' %></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="form-group">
+            <label>Badge</label>
+            <select name="badge" class="form-control">
+              <option value="" <%= !product || !product.badge ? 'selected' : '' %>>None</option>
+              <% ['New','Sale','Hot','Featured'].forEach(b => { %>
+                <option value="<%= b %>" <%= product && product.badge === b ? 'selected' : '' %>><%= b %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group" style="display:flex;align-items:center;gap:10px;padding-top:20px">
+            <input type="checkbox" name="featured" id="featured" <%= product && product.featured ? 'checked' : '' %> />
+            <label for="featured" style="cursor:pointer;font-weight:500">Featured product</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Product Image</label>
+          <% if (product && product.image) { %>
+            <div style="margin-bottom:8px">
+              <img src="<%= product.image %>" alt="Current image" style="width:80px;height:80px;object-fit:contain;border:1px solid var(--border);border-radius:4px;padding:4px" />
+              <p style="font-size:11px;color:var(--text-muted);margin-top:4px">Current image</p>
+            </div>
+          <% } %>
+          <input type="file" name="image" class="form-control" accept="image/jpeg,image/png,image/webp" />
+          <p style="font-size:11px;color:var(--text-muted);margin-top:4px">Accepted formats: JPG, PNG, WebP. Max 5MB.</p>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px">
+          <button type="submit" class="btn btn-primary"><%= product ? 'Save Changes' : 'Add Product' %></button>
+          <a href="/admin" class="btn btn-outline">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<div class="product-card">
+  <% if (product.badge) { %>
+    <span class="product-badge badge-<%= product.badge.toLowerCase() %>"><%= product.badge %></span>
+  <% } %>
+  <a href="/products/<%= product._id %>" class="product-img-link">
+    <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img" loading="lazy" onerror="this.src='/images/img.jpg'" />
+  </a>
+  <div class="product-info">
+    <div class="product-price-row">
+      <span class="product-price">$<%= Number(product.price).toFixed(2) %></span>
+      <% if (product.originalPrice && product.originalPrice > product.price) { %>
+        <span class="product-original-price">$<%= Number(product.originalPrice).toFixed(2) %></span>
+      <% } %>
+    </div>
+    <% if (product.rating > 0) { %>
+      <div class="product-rating">
+        <span class="stars"><%= '★'.repeat(Math.round(product.rating)) %><%= '☆'.repeat(5 - Math.round(product.rating)) %></span>
+        <span class="rating-count"><%= product.rating %></span>
+      </div>
+    <% } %>
+    <a href="/products/<%= product._id %>" class="product-name"><%= product.name %></a>
+    <form action="/cart/add" method="POST" style="margin-top:8px">
+      <input type="hidden" name="productId" value="<%= product._id %>" />
+      <button type="submit" class="btn btn-primary btn-sm" style="width:100%">Add to cart</button>
+    </form>
+  </div>
+</div>

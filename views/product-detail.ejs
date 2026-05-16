@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<div class="detail-page">
+  <div class="container">
+
+    <% if (!product) { %>
+      <div style="text-align:center;padding:60px">
+        <h2>Product not available</h2>
+        <a href="/products" class="btn btn-primary" style="margin-top:16px">Back to products</a>
+      </div>
+    <% } else { %>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" style="margin-bottom:16px">
+      <a href="/">Home</a> › <a href="/products">Products</a> › <a href="/products?category=<%= encodeURIComponent(product.category) %>"><%= product.category %></a> › <span><%= product.name %></span>
+    </div>
+
+    <!-- Main Detail Grid -->
+    <div class="detail-grid">
+
+      <!-- Gallery -->
+      <div class="product-gallery">
+        <img src="<%= product.image %>" alt="<%= product.name %>" class="main-img" id="main-img" onerror="this.src='/images/img.jpg'" />
+        <div class="thumb-list">
+          <img src="<%= product.image %>" alt="thumb" class="thumb active" onclick="setMainImg(this.src)" onerror="this.src='/images/img.jpg'" />
+          <img src="/images/img.jpg" alt="thumb" class="thumb" onclick="setMainImg(this.src)" />
+          <img src="/images/img.jpg" alt="thumb" class="thumb" onclick="setMainImg(this.src)" />
+          <img src="/images/img.jpg" alt="thumb" class="thumb" onclick="setMainImg(this.src)" />
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-detail-info">
+        <div class="in-stock">✔ <%= product.stock > 0 ? 'In stock' : 'Out of stock' %></div>
+        <h1><%= product.name %></h1>
+
+        <div class="detail-rating">
+          <span class="stars"><%= '★'.repeat(Math.round(product.rating || 0)) %><%= '☆'.repeat(5 - Math.round(product.rating || 0)) %></span>
+          <strong><%= product.rating || 0 %></strong>
+          <span>·</span>
+          <span><%= product.reviewCount || 0 %> reviews</span>
+          <span>·</span>
+          <span><%= product.stock %> sold</span>
+        </div>
+
+        <!-- Price Tiers -->
+        <div class="price-tiers">
+          <div class="price-tier">
+            <div class="tier-price">$<%= Number(product.price).toFixed(2) %></div>
+            <div class="tier-range">50-100 pcs</div>
+          </div>
+          <div class="price-tier">
+            <div class="tier-price">$<%= (Number(product.price) * 0.92).toFixed(2) %></div>
+            <div class="tier-range">100-700 pcs</div>
+          </div>
+          <div class="price-tier">
+            <div class="tier-price">$<%= (Number(product.price) * 0.80).toFixed(2) %></div>
+            <div class="tier-range">700+ pcs</div>
+          </div>
+        </div>
+
+        <!-- Specs -->
+        <div class="detail-specs">
+          <div class="spec-row"><span class="spec-label">Price:</span><span>Negotiable</span></div>
+          <div class="spec-row"><span class="spec-label">Type:</span><span><%= product.category %></span></div>
+          <div class="spec-row"><span class="spec-label">Material:</span><span>Premium quality</span></div>
+          <div class="spec-row"><span class="spec-label">Design:</span><span>Modern nice</span></div>
+          <div class="spec-row"><span class="spec-label">Customization:</span><span>Customized logo and design custom packages</span></div>
+          <div class="spec-row"><span class="spec-label">Protection:</span><span>Refund Policy</span></div>
+          <div class="spec-row"><span class="spec-label">Warranty:</span><span>2 years full warranty</span></div>
+        </div>
+      </div>
+
+      <!-- Supplier Card -->
+      <div class="detail-side">
+        <div class="supplier-card-widget">
+          <div class="supplier-header">
+            <div class="supplier-avatar">R</div>
+            <div>
+              <div class="supplier-name">Supplier</div>
+              <div class="supplier-meta">Guanjoi Trading LLC</div>
+            </div>
+          </div>
+          <div class="supplier-badges">
+            <div>🇩🇪 Germany, Berlin</div>
+            <div>✅ Verified Seller</div>
+            <div>🌐 Worldwide shipping</div>
+          </div>
+          <a href="#" class="btn btn-primary btn-full" style="margin-bottom:8px">Send inquiry</a>
+          <a href="#" class="btn btn-outline btn-full btn-sm">Seller's profile</a>
+          <% if (product) { %>
+          <form action="/cart/add" method="POST" style="margin-top:10px">
+            <input type="hidden" name="productId" value="<%= product._id %>" />
+            <button type="submit" class="btn btn-green btn-full">🛒 Add to cart</button>
+          </form>
+          <% } %>
+          <div style="text-align:center;margin-top:10px">
+            <a href="#" style="font-size:13px;color:var(--blue)">🤍 Save for later</a>
+          </div>
+        </div>
+
+        <!-- You May Like -->
+        <% if (related && related.length > 0) { %>
+        <div class="you-may-like" style="margin-top:16px">
+          <h4>You may like</h4>
+          <% related.slice(0,5).forEach(r => { %>
+          <a href="/products/<%= r._id %>" class="side-product">
+            <img src="<%= r.image %>" alt="<%= r.name %>" onerror="this.src='/images/img.jpg'" />
+            <div class="side-product-info">
+              <div class="name"><%= r.name %></div>
+              <div class="price">$<%= Number(r.price).toFixed(2) %> - $<%= (Number(r.price) * 1.3).toFixed(2) %></div>
+            </div>
+          </a>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+
+    </div>
+
+    <!-- Description Tabs -->
+    <div class="detail-tabs">
+      <div class="tab-list">
+        <button class="tab-btn active" onclick="showTab('description', this)">Description</button>
+        <button class="tab-btn" onclick="showTab('reviews', this)">Reviews</button>
+        <button class="tab-btn" onclick="showTab('shipping', this)">Shipping</button>
+        <button class="tab-btn" onclick="showTab('seller', this)">About seller</button>
+      </div>
+      <div id="tab-description" class="tab-content">
+        <p><%= product.description || 'No description available for this product.' %></p>
+        <table class="spec-table" style="margin-top:16px;max-width:500px">
+          <tr><td>Model</td><td>#<%= product._id ? product._id.toString().slice(-7).toUpperCase() : 'N/A' %></td></tr>
+          <tr><td>Style</td><td>Classic style</td></tr>
+          <tr><td>Certificate</td><td>ISO-898921212</td></tr>
+          <tr><td>Category</td><td><%= product.category %></td></tr>
+          <tr><td>Stock</td><td><%= product.stock %> units</td></tr>
+        </table>
+        <ul class="feature-list" style="margin-top:16px">
+          <li>Premium quality materials used</li>
+          <li>Stylish and modern design</li>
+          <li>Durable build for long-term use</li>
+          <li>Backed by 2-year warranty</li>
+        </ul>
+      </div>
+      <div id="tab-reviews" class="tab-content" style="display:none">
+        <p>No reviews yet. Be the first to review this product.</p>
+      </div>
+      <div id="tab-shipping" class="tab-content" style="display:none">
+        <p>Standard shipping: 3-7 business days. Express shipping available at checkout.</p>
+      </div>
+      <div id="tab-seller" class="tab-content" style="display:none">
+        <p>Guanjoi Trading LLC — Verified seller with worldwide shipping. Based in Germany, Berlin.</p>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <% if (related && related.length > 0) { %>
+    <section class="related-section">
+      <h2 class="section-title" style="margin-bottom:16px">Related products</h2>
+      <div class="related-grid">
+        <% related.forEach(r => { %>
+        <a href="/products/<%= r._id %>" class="related-card">
+          <img src="<%= r.image %>" alt="<%= r.name %>" onerror="this.src='/images/img.jpg'" />
+          <div class="name"><%= r.name %></div>
+          <div class="price">$<%= Number(r.price).toFixed(2) %></div>
+        </a>
+        <% }) %>
+      </div>
+    </section>
+    <% } %>
+
+    <!-- Discount Banner -->
+    <div class="discount-banner">
+      <div>
+        <h2>Super discount on more than 100 USD</h2>
+        <p>Have you ever finally just write dummy info</p>
+      </div>
+      <a href="/products" class="btn btn-orange">Shop now</a>
+    </div>
+
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script src="/js/main.js"></script>
+<script>
+function setMainImg(src) {
+  document.getElementById('main-img').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function showTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).style.display = 'block';
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

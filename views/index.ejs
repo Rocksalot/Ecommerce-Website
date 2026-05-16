@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-grid">
+
+      <!-- Category Sidebar -->
+      <ul class="category-sidebar">
+        <li><a href="/products?category=Electronics">Electronics</a></li>
+        <li><a href="/products?category=Fashion">Fashion</a></li>
+        <li><a href="/products?category=Home+%26+Garden">Home & Garden</a></li>
+        <li><a href="/products?category=Sports">Sports</a></li>
+        <li><a href="/products?category=Beauty">Beauty</a></li>
+        <li><a href="/products?category=Books">Books</a></li>
+        <li><a href="/products?category=Toys">Toys</a></li>
+        <li><a href="/products">More category</a></li>
+      </ul>
+
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <div class="hero-text">
+          <h1>Latest trending<br><span>Electronic items</span></h1>
+          <a href="/products" class="btn">Learn more</a>
+        </div>
+        <img src="/images/img.jpg" alt="Featured electronics" class="hero-img" />
+      </div>
+
+      <!-- Hero Right Widgets -->
+      <div class="hero-sidebar">
+        <% if (!user) { %>
+        <div class="hero-widget">
+          <h4>Hi, user<br>let's get started</h4>
+          <a href="/auth/signup" class="btn btn-primary btn-full btn-sm" style="margin-bottom:6px">Join now</a>
+          <a href="/auth/login" class="btn btn-outline btn-full btn-sm">Log in</a>
+        </div>
+        <% } else { %>
+        <div class="hero-widget">
+          <h4>Hi, <%= user.name.split(' ')[0] %>!</h4>
+          <p>Welcome back to ShopHub</p>
+          <a href="/products" class="btn btn-primary btn-full btn-sm">Shop now</a>
+        </div>
+        <% } %>
+        <div class="hero-widget hero-widget-orange">
+          <h4>Get US $10 off with a new supplier</h4>
+        </div>
+        <div class="hero-widget hero-widget-teal">
+          <h4>Send quotes with supplier preferences</h4>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Deals and Offers -->
+<section class="deals-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Deals and offers</div>
+        <div class="section-subtitle">Hygiene equipments</div>
+      </div>
+      <div class="countdown">
+        <div class="countdown-block">04<span class="countdown-label">Days</span></div>
+        <div class="countdown-block">13<span class="countdown-label">Hour</span></div>
+        <div class="countdown-block">34<span class="countdown-label">Min</span></div>
+        <div class="countdown-block" id="sec-block">56<span class="countdown-label">Sec</span></div>
+      </div>
+    </div>
+    <div class="deals-grid">
+      <% const dealItems = [
+        { name: 'Smart watches', discount: '-25%', emoji: '⌚' },
+        { name: 'Laptops', discount: '-15%', emoji: '💻' },
+        { name: 'GoPro cameras', discount: '-40%', emoji: '📷' },
+        { name: 'Headphones', discount: '-25%', emoji: '🎧' },
+        { name: 'Canon cameras', discount: '-25%', emoji: '📸' }
+      ]; %>
+      <% dealItems.forEach(item => { %>
+      <a href="/products?search=<%= item.name %>" class="deal-card">
+        <div style="font-size:48px;text-align:center;padding:8px"><%= item.emoji %></div>
+        <div class="deal-name"><%= item.name %></div>
+        <span class="deal-badge"><%= item.discount %></span>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Home and Outdoor Category -->
+<section class="category-section">
+  <div class="container">
+    <div class="cat-section-grid">
+      <div class="cat-banner cat-banner-home">
+        <div class="cat-banner-content">
+          <h3>Home and<br>outdoor</h3>
+          <a href="/products?category=Home+%26+Garden" class="btn" style="margin-top:12px;background:#fff;width:fit-content">Source now</a>
+        </div>
+      </div>
+      <div>
+        <div class="cat-products-grid">
+          <% const homeItems = [
+            { name: 'Soft chairs', price: 19 }, { name: 'Sofa & chair', price: 19 },
+            { name: 'Kitchen dishes', price: 19 }, { name: 'Smart watches', price: 18 },
+            { name: 'Kitchen mixer', price: 100 }, { name: 'Blenders', price: 39 },
+            { name: 'Home appliance', price: 19 }, { name: 'Coffee maker', price: 10 }
+          ]; %>
+          <% homeItems.forEach(item => { %>
+          <a href="/products?category=Home+%26+Garden" class="cat-product-card">
+            <div style="font-size:28px">🏠</div>
+            <div class="cat-product-info">
+              <div class="name"><%= item.name %></div>
+              <div class="price">From USD <%= item.price %></div>
+            </div>
+          </a>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Consumer Electronics Category -->
+<section class="category-section">
+  <div class="container">
+    <div class="cat-section-grid">
+      <div class="cat-banner cat-banner-electronics">
+        <div class="cat-banner-content">
+          <h3>Consumer electronics and gadgets</h3>
+          <a href="/products?category=Electronics" class="btn" style="margin-top:12px;background:#fff;width:fit-content">Source now</a>
+        </div>
+      </div>
+      <div>
+        <div class="cat-products-grid">
+          <% const elecItems = [
+            { name: 'Smart watches', price: 19 }, { name: 'Cameras', price: 89 },
+            { name: 'Headphones', price: 79 }, { name: 'Smart watches', price: 90 },
+            { name: 'Gaming set', price: 35 }, { name: 'Laptops & PC', price: 340 },
+            { name: 'Smartphones', price: 19 }, { name: 'Electric kettle', price: 240 }
+          ]; %>
+          <% elecItems.forEach(item => { %>
+          <a href="/products?category=Electronics" class="cat-product-card">
+            <div style="font-size:28px">📱</div>
+            <div class="cat-product-info">
+              <div class="name"><%= item.name %></div>
+              <div class="price">From USD <%= item.price %></div>
+            </div>
+          </a>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Promo Banner -->
+<section class="promo-banner">
+  <div class="container">
+    <div class="promo-inner">
+      <div class="promo-text">
+        <h2>An easy way to send requests to all suppliers</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+      </div>
+      <div class="promo-form-card">
+        <h3>Send quote to suppliers</h3>
+        <div class="form-group">
+          <label>What item you need?</label>
+          <input type="text" class="form-control" placeholder="Type more details" />
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0">
+            <label>Quantity</label>
+            <input type="number" class="form-control" placeholder="0" />
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>&nbsp;</label>
+            <select class="form-control"><option>Pcs</option><option>Kg</option><option>Sets</option></select>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:14px;width:100%">Send inquiry</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recommended Items -->
+<section class="recommended-section">
+  <div class="container">
+    <h2 class="section-title" style="margin-bottom:16px">Recommended items</h2>
+    <% if (featured && featured.length > 0) { %>
+      <div class="products-grid-5">
+        <% featured.forEach(product => { %>
+          <%- include('partials/product-card', { product }) %>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <!-- Static fallback when DB not connected -->
+      <div class="products-grid-5">
+        <% const staticProducts = [
+          { name: 'T-shirts with multiple colors, for men', price: 10.30, emoji: '👕' },
+          { name: 'Jeans shorts for men, blue color', price: 10.30, emoji: '👖' },
+          { name: 'Brown winter coat medium size', price: 12.50, emoji: '🧥' },
+          { name: 'Jeans bag for travel for men', price: 34.00, emoji: '👜' },
+          { name: 'Leather wallet', price: 98.00, emoji: '👛' },
+        ]; %>
+        <% staticProducts.forEach(p => { %>
+        <a href="/products" class="product-card" style="text-decoration:none">
+          <div style="font-size:64px;text-align:center;padding:24px;background:#f9f9f9"><%= p.emoji %></div>
+          <div class="product-info">
+            <div class="product-price-row"><span class="product-price">$<%= p.price.toFixed(2) %></span></div>
+            <span class="product-name"><%= p.name %></span>
+          </div>
+        </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- Extra Services -->
+<section class="services-section">
+  <div class="container">
+    <h2 class="section-title" style="margin-bottom:16px">Our extra services</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div style="height:120px;background:#e8dcc8;display:flex;align-items:center;justify-content:center;font-size:48px">📦</div>
+        <div class="service-overlay">🔍</div>
+        <div class="service-info"><h4>Source from<br>Industry Hubs</h4></div>
+      </div>
+      <div class="service-card">
+        <div style="height:120px;background:#d4e8d4;display:flex;align-items:center;justify-content:center;font-size:48px">🎨</div>
+        <div class="service-overlay">🖼️</div>
+        <div class="service-info"><h4>Customize Your<br>Products</h4></div>
+      </div>
+      <div class="service-card">
+        <div style="height:120px;background:#d4d4e8;display:flex;align-items:center;justify-content:center;font-size:48px">✈️</div>
+        <div class="service-overlay">✈️</div>
+        <div class="service-info"><h4>Fast, reliable shipping<br>by ocean or air</h4></div>
+      </div>
+      <div class="service-card">
+        <div style="height:120px;background:#e8e4d4;display:flex;align-items:center;justify-content:center;font-size:48px">🔬</div>
+        <div class="service-overlay">🌐</div>
+        <div class="service-info"><h4>Product monitoring<br>and inspection</h4></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Suppliers by Region -->
+<section class="suppliers-section">
+  <div class="container">
+    <h2 class="section-title" style="margin-bottom:16px">Suppliers by region</h2>
+    <div class="suppliers-grid">
+      <% const regions = [
+        { flag: '🇦🇪', country: 'Arabic Emirates', domain: 'shopname.ae' },
+        { flag: '🇦🇺', country: 'Australia', domain: 'shopname.au' },
+        { flag: '🇺🇸', country: 'United States', domain: 'shopname.us' },
+        { flag: '🇷🇺', country: 'Russia', domain: 'shopname.ru' },
+        { flag: '🇮🇹', country: 'Italy', domain: 'shopname.it' },
+        { flag: '🇫🇷', country: 'France', domain: 'shopname.fr' },
+        { flag: '🇩🇰', country: 'Denmark', domain: 'shopname.dk' },
+        { flag: '🇦🇪', country: 'Arabic Emirates', domain: 'shopname.ae' },
+        { flag: '🇨🇳', country: 'China', domain: 'shopname.cn' },
+        { flag: '🇬🇧', country: 'Great Britain', domain: 'shopname.co.uk' },
+        { flag: '🇩🇪', country: 'Germany', domain: 'shopname.de' },
+        { flag: '🇯🇵', country: 'Japan', domain: 'shopname.jp' }
+      ]; %>
+      <% regions.forEach(r => { %>
+      <div class="supplier-card">
+        <div class="flag"><%= r.flag %></div>
+        <div class="country"><%= r.country %></div>
+        <div class="domain"><%= r.domain %></div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
