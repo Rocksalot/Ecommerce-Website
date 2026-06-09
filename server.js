@@ -39,6 +39,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/books', require('./routes/books'));
 app.use('/', require('./routes/index'));
 app.use('/products', require('./routes/products'));
 app.use('/auth', require('./routes/auth'));
